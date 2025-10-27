@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Приглашение на свадьбу | Виталя и Алина</title>
+<meta name="description" content="Приглашение на свадьбу Виталя и Алина, 26 июня 2026. Детали мероприятия, карта и форма подтверждения участия.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;600&display=swap" rel="stylesheet">
+<style>
+/* Сброс стилей */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Cormorant Garamond', serif; background-color: #fefefe; color: #333; line-height: 1.6; padding-top: 70px; }
+
+/* Верхнее меню */
+header { position: fixed; top: 0; left: 0; width: 100%; background-color: rgba(255, 255, 255, 0.95); box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; }
+nav { display: flex; justify-content: center; padding: 15px 20px; gap: 30px; flex-wrap: wrap; }
+nav a { text-decoration: none; color: #8b7355; font-weight: 600; transition: color 0.3s; }
+nav a:hover { color: #b08a56; }
+
+/* Главный экран */
+.hero {
+    min-height: 100vh;
+    background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url("photo/go.jpg") center/cover no-repeat;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; color: white; padding: 20px; position: relative;
+}
+.names { font-size: 4rem; margin-bottom: 1rem; font-weight: 300; }
+.date { font-size: 1.5rem; margin-bottom: 2rem; letter-spacing: 3px; }
+.scroll-down { position: absolute; bottom: 30px; font-size: 0.9rem; animation: bounce 2s infinite; }
+
+/* Секции */
+.section { padding: 80px 20px; max-width: 800px; margin: 0 auto; }
+.section-title { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; font-weight: 300; }
+
+/* Детали мероприятия */
+.details-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 40px; justify-items: center; align-items: start; }
+.detail-card { text-align: center; padding: 25px; background-color: #fff; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; min-width: 250px; }
+.detail-card:hover { transform: translateY(-5px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+.detail-card h3 { font-size: 1.6rem; margin-bottom: 15px; color: #b08a56; letter-spacing: 1px; font-weight: 600; position: relative; text-transform: uppercase; transition: color 0.3s ease; }
+.detail-card h3::after { content: ''; position: absolute; left: 50%; bottom: -6px; transform: translateX(-50%); width: 40px; height: 2px; background-color: #b08a56; border-radius: 2px; transition: width 0.3s ease, background-color 0.3s ease; }
+.detail-card:hover h3 { color: #8b7355; }
+.detail-card:hover h3::after { width: 60px; background-color: #8b7355; }
+
+/* Карусель дресс-кода */
+.carousel {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  overflow: hidden;
+  height: 270px;
+}
+.carousel-track {
+  display: flex;
+  gap: 20px;
+  transition: transform 0.5s ease;
+  height: 100%;
+  align-items: center;
+}
+.carousel-track .dresscode-item {
+  flex: 0 0 auto;
+  width: 250px;
+  height: 200px;
+  transition: transform 0.5s ease, filter 0.5s ease;
+  transform: scale(0.9);
+  filter: brightness(0.85);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  cursor: pointer;
+}
+.carousel-track .dresscode-item.center {
+  transform: scale(1);
+  filter: brightness(1);
+}
+.carousel-track .dresscode-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.carousel-track .dresscode-item:hover img {
+  transform: scale(1.05);
+}
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(139,115,85,0.7);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  z-index: 10;
+  transition: background-color 0.3s;
+}
+.carousel-btn.left { left: 10px; }
+.carousel-btn.right { right: 10px; }
+.carousel-btn:hover { background-color: rgba(139,115,85,0.9); }
+
+/* Модальное окно */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.9);
+  animation: fadeIn 0.3s ease;
+}
+.modal-content {
+  position: relative;
+  margin: auto;
+  display: block;
+  max-width: 90%;
+  max-height: 90%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 10px;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+}
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: white;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s;
+  z-index: 2001;
+}
+.modal-close:hover {
+  color: #b08a56;
+}
+.modal-caption {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  color: white;
+  font-size: 1.2rem;
+  padding: 10px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+}
+
+/* Секция пожеланий */
+.wishes-section {
+  text-align: center;
+  background-color: #faf8f5;
+  padding: 60px 20px;
+  margin: 40px 0;
+  border-radius: 15px;
+}
+.wishes-text {
+  font-size: 1.3rem;
+  line-height: 1.8;
+  max-width: 700px;
+  margin: 0 auto 30px auto;
+  color: #5a4a3a;
+}
+
+/* Секция Telegram */
+.telegram-section {
+  text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #faf8f5 0%, #f0ede8 100%);
+  border-radius: 15px;
+  margin: 40px 0;
+}
+.telegram-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #8b7355;
+}
+.telegram-text {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto 30px auto;
+  color: #5a4a3a;
+}
+.telegram-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #0088cc;
+  color: white;
+  text-decoration: none;
+  padding: 15px 30px;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 136, 204, 0.3);
+}
+.telegram-btn:hover {
+  background-color: #0077b3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 136, 204, 0.4);
+}
+.telegram-icon {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+/* Секция контактов */
+.contacts-section {
+  text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #f8f6f3 0%, #f0ece5 100%);
+  border-radius: 15px;
+  margin: 40px 0;
+}
+.contacts-title {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #8b7355;
+}
+.contacts-text {
+  font-size: 1.3rem;
+  line-height: 1.8;
+  max-width: 600px;
+  margin: 0 auto 30px auto;
+  color: #5a4a3a;
+}
+.contacts-numbers {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+.contact-item {
+  text-align: center;
+  padding: 20px;
+}
+.contact-name {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #b08a56;
+  margin-bottom: 10px;
+}
+.contact-number {
+  font-size: 1.3rem;
+  color: #5a4a3a;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.contact-number:hover {
+  color: #8b7355;
+}
+
+/* Плавное появление */
+.fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+.fade-in.show { opacity: 1; transform: translateY(0); }
+
+/* Таймер */
+.countdown { display: flex; justify-content: center; gap: 20px; margin: 40px 0; flex-wrap: wrap; }
+.countdown-item { text-align: center; }
+.countdown-number { font-size: 2rem; font-weight: bold; color: #8b7355; }
+
+/* Форма RSVP */
+.rsvp-form { max-width: 500px; margin: 0 auto; }
+.form-group { margin-bottom: 20px; }
+label { display: block; margin-bottom: 5px; font-weight: bold; }
+input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; font-size: 1rem; }
+button { background-color: #8b7355; color: white; padding: 15px 30px; border: none; border-radius: 5px; font-size: 1.1rem; cursor: pointer; width: 100%; transition: background-color 0.3s; }
+button:hover { background-color: #756046; }
+
+/* Карта */
+.map { height: 400px; background-color: #eee; margin-top: 20px; }
+
+/* Футер */
+footer { text-align: center; padding: 40px 20px; background-color: #f8f8f8; margin-top: 60px; }
+
+/* Анимации */
+@keyframes bounce { 0%,20%,50%,80%,100%{transform:translateY(0);} 40%{transform:translateY(-10px);} 60%{transform:translateY(-5px);} }
+@keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .details-grid { grid-template-columns: 1fr; }
+    .names { font-size: 2.5rem; }
+    .countdown { gap: 10px; }
+    .countdown-number { font-size: 1.5rem; }
+    nav { gap: 15px; }
+    .carousel-track .dresscode-item { width: 180px; height: 150px; }
+    .modal-content { max-width: 95%; max-height: 80%; }
+    .modal-close { top: 10px; right: 15px; font-size: 30px; }
+    .wishes-text { font-size: 1.1rem; }
+    .telegram-title { font-size: 1.7rem; }
+    .telegram-text { font-size: 1.1rem; }
+    .contacts-numbers { gap: 20px; }
+    .contact-name { font-size: 1.2rem; }
+    .contact-number { font-size: 1.1rem; }
+}
+</style>
+</head>
+<body>
+<!-- Верхнее меню -->
+<header>
+    <nav>
+        <a href="#home">Главная</a>
+        <a href="#greeting">Приветствие</a>
+        <a href="#details">Детали</a>
+        <a href="#dresscode">Дресс-код</a>
+        <a href="#wishes">Пожелания</a>
+        <a href="#location">Место</a>
+        <a href="#telegram">Telegram</a>
+        <a href="#rsvp">Присутствие</a>
+        <a href="#contacts">Контакты</a>
+    </nav>
+</header>
+
+<!-- Главный экран -->
+<section class="hero" id="home">
+    <h1 class="names fade-in">Виталя и Алина</h1>
+    <p class="date fade-in">26 Июня 2026</p>
+    <div class="scroll-down fade-in">↓ Листайте вниз ↓</div>
+</section>
+
+<!-- Приветствие -->
+<section class="section" id="greeting">
+    <h2 class="section-title fade-in">Дорогие друзья и родные!</h2>
+    <p class="fade-in" style="text-align: center; font-size: 1.2rem; max-width: 600px; margin: 0 auto;">
+        Скоро наступит день, когда мы скажем друг другу «да», и нам так хочется, чтобы рядом были те, кто нам дорог. 
+        Будем счастливы видеть вас на нашей свадьбе!
+    </p>
+</section>
+
+<!-- Таймер -->
+<section class="section" id="countdown">
+    <h2 class="section-title fade-in">До свадьбы осталось</h2>
+    <div class="countdown fade-in" id="weddingCountdown">
+        <div class="countdown-item"><div class="countdown-number" id="days">0</div><div>дней</div></div>
+        <div class="countdown-item"><div class="countdown-number" id="hours">0</div><div>часов</div></div>
+        <div class="countdown-item"><div class="countdown-number" id="minutes">0</div><div>минут</div></div>
+        <div class="countdown-item"><div class="countdown-number" id="seconds">0</div><div>секунд</div></div>
+    </div>
+</section>
+
+<!-- Детали мероприятия -->
+<section class="section" id="details">
+    <h2 class="section-title fade-in">Детали мероприятия</h2>
+    <div class="details-grid fade-in">
+        <div class="detail-card"><h3>Регистрация<br>брака</h3><p>26 июня 2026</p><p>13:00</p><p>Отдел ЗАГС м.р. Сергиевский</p></div>
+        <div class="detail-card"><h3>Банкет</h3><p>26 июня 2026</p><p>17:00</p><p>Ресторан «Югра»</p></div>
+        <div class="detail-card address-card"><h3>Адрес</h3><p>п. г. т. Суходол, М-5</p><p>Урал, 1114-й км</p></div>
+    </div>
+</section>
+
+<!-- Дресс-код с каруселью -->
+<section class="section" id="dresscode">
+    <h2 class="section-title fade-in">Дресс-код</h2>
+    <p class="fade-in" style="text-align: center; font-size: 1.2rem; max-width: 700px; margin: 0 auto 40px auto; line-height: 1.6;">
+        Мы ждём и с удовольствием готовимся к нашему незабываемому дню!<br>
+        Поддержите нас вашими улыбками и объятиями, а также красивыми нарядами в палитре торжества:<br><br>
+        Оттенки коричневого, бежевого и зелёного цветов (постельные).<br><br>
+        Пожалуйста, воздержитесь от ярких цветов, джинсов и белых нарядов.
+    </p>
+
+    <div class="carousel fade-in">
+        <button class="carousel-btn left">&#10094;</button>
+        <div class="carousel-track">
+            <div class="dresscode-item"><img src="photo/img1.jpg" alt="Пример наряда 1"></div>
+            <div class="dresscode-item center"><img src="photo/img2.jpg" alt="Пример наряда 2"></div>
+            <div class="dresscode-item"><img src="photo/img3.jpg" alt="Пример наряда 3"></div>
+        </div>
+        <button class="carousel-btn right">&#10095;</button>
+    </div>
+</section>
+
+<!-- Модальное окно для фото -->
+<div id="imageModal" class="modal">
+    <span class="modal-close">&times;</span>
+    <img class="modal-content" id="modalImage">
+    <div class="modal-caption" id="modalCaption"></div>
+</div>
+
+<!-- Пожелания -->
+<section class="section" id="wishes">
+    <h2 class="section-title fade-in">Пожелания</h2>
+    <div class="wishes-section fade-in">
+        <p class="wishes-text">
+            Лучшая поддержка для нас - ваши искренние пожелания и лучезарные улыбки!<br>
+            Мы не хотим утруждать вас выбором подарка, поэтому будем рады вашему вкладу<br>
+            в бюджет нашей молодой семьи.
+        </p>
+    </div>
+</section>
+
+<!-- Карта -->
+<section class="section" id="location">
+    <h2 class="section-title fade-in">Место проведения</h2>
+    <div class="map fade-in">
+        <iframe loading="lazy" src="https://yandex.ru/map-widget/v1/?um=constructor%3Af5a0eadc5efb4d6b8af6507d002b65a714b9ec49f55160153b2e82fe7561b900&amp;source=constructor" width="100%" height="100%" frameborder="0"></iframe>
+    </div>
+</section>
+
+<!-- Telegram группа -->
+<section class="section" id="telegram">
+    <h2 class="section-title fade-in">Наша свадебная группа</h2>
+    <div class="telegram-section fade-in">
+        <h3 class="telegram-title">Мы создали группу в Telegram для всех гостей</h3>
+        <p class="telegram-text">
+            Давайте добавлять в неё все свадебные видеоролики и фотографии!<br>
+            А позже и мы поделимся с вами кадрами со свадьбы от профессионального фотографа)
+        </p>
+        <a href="https://t.me/your_wedding_group" class="telegram-btn" target="_blank">
+            <svg class="telegram-icon" viewBox="0 0 24 24">
+                <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.14.141-.259.259-.374.261l.213-3.053 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.136-.954l11.566-4.458c.538-.196 1.006.128.832.941z"/>
+            </svg>
+            Присоединиться к группе
+        </a>
+    </div>
+</section>
+
+<!-- RSVP форма -->
+<section class="section" id="rsvp">
+    <h2 class="section-title fade-in">Подтвердите участие</h2>
+    <form class="rsvp-form fade-in" action="https://formspree.io/f/mqageqbv" method="POST">
+        <div class="form-group"><label for="name">Ваше имя/имена *</label><input type="text" id="name" name="name" required></div>
+        <div class="form-group"><label for="guests">Количество гостей *</label>
+            <select id="guests" name="guests" required>
+                <option value="1">1 человек</option><option value="2">2 человека</option>
+                <option value="3">3 человека</option><option value="4">4 человека</option>
+            </select>
+        </div>
+        <div class="form-group"><label for="attendance">Присутствие *</label>
+            <select id="attendance" name="attendance" required>
+                <option value="yes">С радостью приду!</option><option value="no">К сожалению, не смогу</option>
+            </select>
+        </div>
+        <div class="form-group"><label for="message">Пожелания или вопросы</label><textarea id="message" name="message" rows="4"></textarea></div>
+        <button type="submit">Отправить ответ</button>
+    </form>
+</section>
+
+<!-- Контакты -->
+<section class="section" id="contacts">
+    <h2 class="section-title fade-in">Контакты</h2>
+    <div class="contacts-section fade-in">
+        <p class="contacts-text">
+            По всем вопросам вы можете обратиться к нам:
+        </p>
+        <div class="contacts-numbers">
+            <div class="contact-item">
+                <div class="contact-name">Алина</div>
+                <a href="tel:+79277107613" class="contact-number">+7 (927) 710-76-13</a>
+            </div>
+            <div class="contact-item">
+                <div class="contact-name">Виталя</div>
+                <a href="tel:+79377968523" class="contact-number">+7 (937) 796-85-23</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Футер -->
+<footer>
+    <p>С любовью, Виталя и Алина</p>
+    <p style="margin-top: 10px; font-size: 0.9rem; color: #666;">© 2026</p>
+</footer>
+
+<script>
+// Таймер
+function updateCountdown() {
+    const weddingDate = new Date('June 26, 2026 13:00:00').getTime();
+    const now = new Date().getTime();
+    const distance = weddingDate - now;
+
+    if (distance < 0) {
+        clearInterval(countdownTimer);
+        document.getElementById('weddingCountdown').innerHTML = "<div style='text-align:center; font-size:1.5rem; color:#8b7355;'>Свадьба состоялась!</div>";
+        return;
+    }
+
+    document.getElementById('days').textContent = Math.floor(distance / (1000*60*60*24));
+    document.getElementById('hours').textContent = Math.floor((distance % (1000*60*60*24))/(1000*60*60));
+    document.getElementById('minutes').textContent = Math.floor((distance % (1000*60*60))/(1000*60));
+    document.getElementById('seconds').textContent = Math.floor((distance % (1000*60))/1000);
+}
+
+const countdownTimer = setInterval(updateCountdown, 1000);
+updateCountdown();
+
+// Карусель дресс-кода
+document.addEventListener('DOMContentLoaded', function() {
+    const track = document.querySelector('.carousel-track');
+    const items = document.querySelectorAll('.dresscode-item');
+    const leftBtn = document.querySelector('.carousel-btn.left');
+    const rightBtn = document.querySelector('.carousel-btn.right');
+    
+    let currentIndex = 1; // Центральный элемент
+    
+    function updateCarousel() {
+        items.forEach((item, index) => {
+            item.classList.remove('center');
+            if (index === currentIndex) {
+                item.classList.add('center');
+            }
+        });
+        
+        // Позиционируем трек так, чтобы центральный элемент был по центру
+        const itemWidth = items[0].offsetWidth + 20; // width + gap
+        const offset = (track.offsetWidth / 2) - (itemWidth / 2) - (currentIndex * itemWidth);
+        track.style.transform = `translateX(${offset}px)`;
+    }
+    
+    leftBtn.addEventListener('click', function() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateCarousel();
+        }
+    });
+    
+    rightBtn.addEventListener('click', function() {
+        if (currentIndex < items.length - 1) {
+            currentIndex++;
+            updateCarousel();
+        }
+    });
+    
+    // Модальное окно для фото
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+    const modalCaption = document.getElementById('modalCaption');
+    const closeBtn = document.querySelector('.modal-close');
+    
+    // Добавляем обработчики клика на все изображения в карусели
+    items.forEach(item => {
+        const img = item.querySelector('img');
+        img.addEventListener('click', function() {
+            modal.style.display = 'block';
+            modalImg.src = this.src;
+            modalCaption.textContent = this.alt;
+        });
+    });
+    
+    // Закрытие модального окна
+    closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+    });
+    
+    // Закрытие при клике вне изображения
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+    
+    // Закрытие по клавише ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.style.display === 'block') {
+            modal.style.display = 'none';
+        }
+    });
+    
+    // Инициализация карусели
+    updateCarousel();
+    
+    // Анимация появления элементов при скролле
+    const fadeElements = document.querySelectorAll('.fade-in');
+    
+    function checkFade() {
+        fadeElements.forEach(element => {
+            const elementTop = element.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
+            
+            if (elementTop < windowHeight - 100) {
+                element.classList.add('show');
+            }
+        });
+    }
+    
+    window.addEventListener('scroll', checkFade);
+    window.addEventListener('resize', checkFade);
+    checkFade(); // Проверить при загрузке
+});
+</script>
+</body>
+</html>
